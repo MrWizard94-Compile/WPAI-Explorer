@@ -1,0 +1,9 @@
+{
+  "provider": "ollama",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Say hello in one sentence"
+    }
+  ]
+}

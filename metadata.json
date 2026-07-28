@@ -1,0 +1,6 @@
+{
+  "name": "WPAI Explorer",
+  "description": "A Vector & Graph-native exploration interface for Minecraft modding context, entity dependencies, and provenance data.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

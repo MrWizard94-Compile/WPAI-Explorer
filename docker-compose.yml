@@ -1,0 +1,65 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      OLLAMA_ORIGINS: "*"
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  ollama-models:
+    image: ollama/ollama:latest
+    container_name: wpai-ollama-models
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      set -eu;
+      for model in gemma3:270m qwen2.5-coder:0.5b smollm2:135m; do
+        echo "Pulling $$model";
+        ollama pull "$$model";
+      done
+    restart: "no"
+
+  app:
+    build:
+      context: .
+      target: dev
+    container_name: wpai-explorer
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      HOST: 0.0.0.0
+      PORT: 3000
+      OLLAMA_BASE_URL: http://ollama:11434/v1
+      OLLAMA_MODEL: gemma3:270m
+      OLLAMA_MODELS: "gemma3:270m qwen2.5-coder:0.5b smollm2:135m"
+    volumes:
+      - ./src:/app/src
+      - ./server.ts:/app/server.ts
+      - ./index.html:/app/index.html
+      - ./vite.config.ts:/app/vite.config.ts
+      - ./tsconfig.json:/app/tsconfig.json
+      - node_modules:/app/node_modules
+    depends_on:
+      ollama:
+        condition: service_healthy
+      ollama-models:
+        condition: service_completed_successfully
+    command: npm run dev
+
+volumes:
+  ollama_data:
+  node_modules:
