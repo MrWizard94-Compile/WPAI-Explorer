@@ -1,0 +1,29 @@
+id: "mod_fabric_api_001"
+dewey_code: "794.81.1"
+type: "Mod"
+canonical:name: "Fabric API"
+  slug: "fabric-api"
+  description_summary: "Essential hooks and interoperability measures for Fabric mods."
+  loaders:
+    - "fabric"
+    - "quilt"
+  categories:
+    - "library"
+    - "api"
+provenance:name:
+    - source: "modrinth"
+      project_id: "P7R2awM3"
+      field: "title"
+      confidence: 1
+aliases:
+  - source: "modrinth"
+    project_id: "P7R2awM3"
+    slug: "fabric-api"
+  - source: "curseforge"
+    project_id: 306612
+    slug: "fabric-api"
+timestamps:first_seen: "2018-12-10T00:00:00Z"
+  last_canonicalized: "2026-08-02T02:25:19.956Z"
+vector_2d:
+  - 15
+  - 40

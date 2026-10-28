@@ -1,0 +1,26 @@
+id: "mod_indium_001"
+dewey_code: "794.81.1"
+type: "Mod"
+canonical:name: "Indium"
+  slug: "indium"
+  description_summary: "Sodium addon providing support for the Fabric Rendering API."
+  loaders:
+    - "fabric"
+    - "quilt"
+  categories:
+    - "performance"
+    - "api-implementation"
+provenance:name:
+    - source: "modrinth"
+      project_id: "Orvt0mRa"
+      field: "title"
+      confidence: 0.99
+aliases:
+  - source: "modrinth"
+    project_id: "Orvt0mRa"
+    slug: "indium"
+timestamps:first_seen: "2021-06-20T00:00:00Z"
+  last_canonicalized: "2026-08-02T02:25:19.956Z"
+vector_2d:
+  - 22
+  - 35

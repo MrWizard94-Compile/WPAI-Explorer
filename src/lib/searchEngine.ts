@@ -1,5 +1,5 @@
 import { Entity, SearchQuery, ContextBundle, BundleEdge } from '../types';
-import { mockEntities } from '../data/mockEntities';
+import { entityStore } from '../data/entityStore';
 
 export function parseQuery(rawQuery: string): SearchQuery {
   const q = rawQuery.toLowerCase();
@@ -32,68 +32,54 @@ export function executeSmartContext(query: string): ContextBundle {
   // Step 1: Find target dependency mod if specified
   let targetModId: string | null = null;
   if (parsed.facets.dependency) {
-    const target = mockEntities.find(e =>
-      e.type === 'Mod' && e.canonical.slug === parsed.facets.dependency
+    const target = Array.from(entityStore.entities.values()).find(e =>
+      e.type === 'Mod' && String(e.canonical.slug).toLowerCase() === parsed.facets.dependency?.toLowerCase()
     );
     if (target) {
       targetModId = target.id;
       bundleEntities.set(target.id, target);
-      semantic_matches.push({ id: target.id, score: 0.98, section: "name/slug" });
+      semantic_matches.push({ id: target.id, score: 0.98, section: 'name/slug' });
     }
   }
 
-  // Step 2: Vector Search & Facet filtering (Mocked)
   if (targetModId) {
-    // Find dependency edges pointing to target
-    const targetEdges = mockEntities.filter(e =>
-      e.type === 'DependencyEdge' &&
-      e.canonical.target_mod_id === targetModId
+    const targetEdges = Array.from(entityStore.entities.values()).filter(e =>
+      e.type === 'DependencyEdge' && String(e.canonical.target_mod_id) === targetModId
     );
 
     targetEdges.forEach(edge => {
       bundleEntities.set(edge.id, edge);
-      semantic_matches.push({ id: edge.id, score: 0.85, section: "clause_text" });
+      semantic_matches.push({ id: edge.id, score: 0.85, section: 'clause_text' });
 
-      // Source Mod
       if (edge.canonical.source_mod_id) {
-        const srcMod = mockEntities.find(m => m.id === edge.canonical.source_mod_id);
+        const srcMod = entityStore.getEntityById(String(edge.canonical.source_mod_id));
         if (srcMod) {
           bundleEntities.set(srcMod.id, srcMod);
-          edges.push({ source: srcMod.id, target: targetModId!, type: edge.canonical.relation as string });
+          edges.push({ source: srcMod.id, target: targetModId!, type: String(edge.canonical.relation || 'depends_on') });
         }
       }
 
-      // Source Version
       if (edge.canonical.source_version_id) {
-        const srcVer = mockEntities.find(v => v.id === edge.canonical.source_version_id);
+        const srcVer = entityStore.getEntityById(String(edge.canonical.source_version_id));
         if (srcVer) {
           bundleEntities.set(srcVer.id, srcVer);
-          edges.push({ source: srcVer.id, target: targetModId!, type: edge.canonical.relation as string });
+          edges.push({ source: srcVer.id, target: targetModId!, type: String(edge.canonical.relation || 'depends_on') });
 
-          // Link version to its parent mod
-          const parentMod = mockEntities.find(m => m.id === srcVer.canonical.mod_id);
+          const parentMod = entityStore.getEntityById(String(srcVer.canonical.mod_id));
           if (parentMod) {
             bundleEntities.set(parentMod.id, parentMod);
-            edges.push({ source: srcVer.id, target: parentMod.id, type: "belongs_to" });
+            edges.push({ source: srcVer.id, target: parentMod.id, type: 'belongs_to' });
           }
         }
       }
     });
   } else {
-      // General search if no dependency specified
-      const mods = mockEntities.filter(e => {
-        if (e.type !== 'Mod') return false;
-        const name = typeof e.canonical.name === 'string' ? e.canonical.name : '';
-        const desc = typeof e.canonical.description_summary === 'string' ? e.canonical.description_summary : '';
-        const matchesKeyword = parsed.keywords.length === 0 || parsed.keywords.some(k => k.length > 2 && (name.toLowerCase().includes(k) || desc.toLowerCase().includes(k)));
-        const matchesLoader = !parsed.facets.loader || (Array.isArray(e.canonical.loaders) && e.canonical.loaders.includes(parsed.facets.loader));
-        return matchesKeyword && matchesLoader;
-      });
-      const results = mods.length > 0 ? mods : mockEntities.filter(e => e.type === 'Mod');
-      results.forEach(m => {
-          bundleEntities.set(m.id, m);
-          semantic_matches.push({ id: m.id, score: 0.92, section: "description_summary" });
-      });
+    const results = entityStore.searchEntities(query).filter((entity) => entity.type === 'Mod');
+    const matches = results.length > 0 ? results : Array.from(entityStore.entities.values()).filter((entity) => entity.type === 'Mod');
+    matches.forEach((mod) => {
+      bundleEntities.set(mod.id, mod);
+      semantic_matches.push({ id: mod.id, score: 0.92, section: 'description_summary' });
+    });
   }
 
   const finalEntities = Array.from(bundleEntities.values());

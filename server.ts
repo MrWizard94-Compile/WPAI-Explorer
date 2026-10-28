@@ -4,6 +4,8 @@ import path from 'node:path';
 import { GoogleGenAI, Type } from '@google/genai';
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
+import { entityStore } from './src/data/entityStore';
+import { executeSmartContext } from './src/lib/searchEngine';
 import {
   DEFAULT_OLLAMA_MODEL,
   OLLAMA_MODEL_PROFILES,
@@ -337,6 +339,60 @@ export async function startServer(options: StartServerOptions = {}): Promise<Sta
       ollamaModels: getConfiguredOllamaModels(),
       recommendedModels: OLLAMA_MODEL_PROFILES
     });
+  });
+
+  app.get('/api/fs/tree', (_req, res) => {
+    res.json(entityStore.getTree());
+  });
+
+  app.get('/api/fs/file', (req, res) => {
+    const filePath = getString(req.query.path);
+    if (!filePath) {
+      res.status(400).json({ error: 'File path is required.' });
+      return;
+    }
+
+    const file = entityStore.getFile(filePath);
+    if (!file) {
+      res.status(404).json({ error: 'File not found.' });
+      return;
+    }
+
+    res.json(file);
+  });
+
+  app.get('/api/entities/:id', (req, res) => {
+    const entity = entityStore.getEntityById(req.params.id);
+    if (!entity) {
+      res.status(404).json({ error: 'Entity not found.' });
+      return;
+    }
+    res.json(entity);
+  });
+
+  app.get('/api/entities/:id/file', (req, res) => {
+    const entityId = req.params.id;
+    const filePath = entityStore.getEntityFilePath(entityId);
+    const absolutePath = entityStore.getEntityAbsoluteFilePath(entityId);
+    if (!filePath || !absolutePath) {
+      res.status(404).json({ error: 'Entity file not found.' });
+      return;
+    }
+    res.json({ path: filePath, absolutePath, downloadUrl: `/api/fs/file?path=${encodeURIComponent(filePath)}` });
+  });
+
+  app.get('/api/search', (req, res) => {
+    const query = getString(req.query.q) || '';
+    const bundle = executeSmartContext(query);
+    res.json(bundle);
+  });
+
+  app.get('/api/graph', (_req, res) => {
+    res.json(entityStore.getGraphData());
+  });
+
+  app.get('/api/vectors', (_req, res) => {
+    res.json({ vectors: entityStore.getVectorData() });
   });
 
   app.get('/api/ollama/status', async (req, res) => {

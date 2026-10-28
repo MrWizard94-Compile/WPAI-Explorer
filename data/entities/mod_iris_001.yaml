@@ -1,0 +1,29 @@
+id: "mod_iris_001"
+dewey_code: "794.81.1"
+type: "Mod"
+canonical:name: "Iris Shaders"
+  slug: "iris"
+  description_summary: "A modern shaders mod for Minecraft intended to be compatible with existing OptiFine shader packs."
+  loaders:
+    - "fabric"
+    - "quilt"
+  categories:
+    - "rendering"
+    - "shaders"
+provenance:name:
+    - source: "modrinth"
+      project_id: "YL57xq9U"
+      field: "title"
+      confidence: 0.99
+aliases:
+  - source: "modrinth"
+    project_id: "YL57xq9U"
+    slug: "iris"
+  - source: "curseforge"
+    project_id: 455508
+    slug: "iris"
+timestamps:first_seen: "2021-02-12T00:00:00Z"
+  last_canonicalized: "2026-08-02T02:25:19.956Z"
+vector_2d:
+  - 30
+  - 80

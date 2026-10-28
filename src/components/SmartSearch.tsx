@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Loader2, Database, Box, Play, GitMerge, AlertCircle, Server, Cpu, CheckCircle2, XCircle, RefreshCw, Terminal } from 'lucide-react';
-import { executeSmartContext } from '../lib/searchEngine';
 import { AiProvider, ContextBundle, OllamaStatus, RuntimeConfig } from '../types';
 import { jsonToYaml } from '../utils/yaml';
 import { motion, AnimatePresence } from 'motion/react';
@@ -149,22 +148,22 @@ export const SmartSearchPanel: React.FC = () => {
     setAiAnalysis(null);
     setAiError(null);
 
-    // Simulate network delay for bundle creation
-    await new Promise(resolve => setTimeout(resolve, 800));
-
-    const newBundle = executeSmartContext(query);
-    setBundle(newBundle);
-    setIsSearching(false);
-
-    // Call AI Endpoint
-    setIsAiLoading(true);
     try {
+      const searchResponse = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+      const searchData = await searchResponse.json() as ContextBundle;
+      if (!searchResponse.ok) {
+        throw new Error((searchData as any).error || 'Failed to execute search');
+      }
+      setBundle(searchData);
+      setIsSearching(false);
+
+      setIsAiLoading(true);
       const response = await fetch('/api/ai/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           query,
-          bundle: newBundle,
+          bundle: searchData,
           provider: aiProvider,
           ollamaBaseUrl,
           ollamaModel
@@ -178,6 +177,9 @@ export const SmartSearchPanel: React.FC = () => {
       }
     } catch (e) {
       console.error(e);
+      setBundle(null);
+      setIsSearching(false);
+      setIsAiLoading(false);
       setAiError(getErrorMessage(e));
     } finally {
       setIsAiLoading(false);

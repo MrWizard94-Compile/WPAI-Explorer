@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { generateFileSystem } from './data/mockEntities';
 import { FileSystemExplorer } from './components/FileSystemExplorer';
 import { SmartSearchPanel } from './components/SmartSearch';
 import { EntityViewer } from './components/EntityViewer';
@@ -16,27 +15,48 @@ type ActiveTab = 'explorer' | 'search' | 'chat' | 'vector' | 'graph' | 'settings
 export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>('explorer');
   const [selectedFile, setSelectedFile] = useState<FileNode | null>(null);
+  const [fileSystem, setFileSystem] = useState<FileNode | null>(null);
+  const [isLoadingTree, setIsLoadingTree] = useState(true);
 
-  const fileSystem = useMemo(() => generateFileSystem(), []);
+  const findFirstFile = (node: FileNode | null): FileNode | null => {
+    if (!node) return null;
+    if (node.type === 'file') return node;
+    if (!node.children) return null;
+    for (const child of node.children) {
+      const first = findFirstFile(child);
+      if (first) return first;
+    }
+    return null;
+  };
 
-  // Pre-select a file for demonstration
   useEffect(() => {
-    if (fileSystem.children && fileSystem.children.length > 0) {
-      const canon = fileSystem.children.find(c => c.name === 'mc-canon');
-      if (canon?.children) {
-        const entities = canon.children.find(c => c.name === 'entities');
-        if (entities?.children) {
-          const mods = entities.children.find(c => c.name === 'Mod');
-          if (mods?.children) {
-            const sodiumFolder = mods.children.find(c => c.name === 'mod_sodium_001');
-            if (sodiumFolder?.children) {
-               setSelectedFile(sodiumFolder.children[0]);
-            }
-          }
+    let cancelled = false;
+
+    async function loadTree() {
+      setIsLoadingTree(true);
+      try {
+        const response = await fetch('/api/fs/tree');
+        if (!response.ok) {
+          console.error('Failed to load filesystem tree', response.statusText);
+          return;
         }
+        const tree = await response.json() as FileNode;
+        if (cancelled) return;
+        setFileSystem(tree);
+        const firstFile = findFirstFile(tree);
+        if (firstFile) setSelectedFile(firstFile);
+      } catch (error) {
+        console.error('Error fetching filesystem tree', error);
+      } finally {
+        if (!cancelled) setIsLoadingTree(false);
       }
     }
-  }, [fileSystem]);
+
+    void loadTree();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <div className="flex h-screen w-full bg-black text-zinc-100 font-sans overflow-hidden selection:bg-lime-500/30">
@@ -150,12 +170,17 @@ export default function App() {
                 <p className="text-xs text-zinc-500 mt-1.5 leading-relaxed font-mono">Wizard Productions AI Studio</p>
               </div>
               <div className="flex-1 overflow-hidden relative">
-                <FileSystemExplorer
-                  data={fileSystem}
-                  onSelectFile={setSelectedFile}
-                  selectedFile={selectedFile}
-                />
-                {/* Gradient fade at bottom for style */}
+                {fileSystem ? (
+                  <FileSystemExplorer
+                    data={fileSystem}
+                    onSelectFile={setSelectedFile}
+                    selectedFile={selectedFile}
+                  />
+                ) : (
+                  <div className="h-full flex items-center justify-center text-zinc-500 font-mono text-sm px-4">
+                    {isLoadingTree ? 'Loading local entity store…' : 'Failed to load entity store.'}
+                  </div>
+                )}
                 <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#0A0A0A] to-transparent pointer-events-none" />
               </div>
             </div>

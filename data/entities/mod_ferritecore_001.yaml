@@ -1,0 +1,26 @@
+id: "mod_ferritecore_001"
+dewey_code: "794.81.1"
+type: "Mod"
+canonical:name: "FerriteCore"
+  slug: "ferritecore"
+  description_summary: "Memory usage optimizations for Minecraft."
+  loaders:
+    - "fabric"
+    - "forge"
+    - "quilt"
+  categories:
+    - "performance"
+provenance:name:
+    - source: "modrinth"
+      project_id: "uXXwy32m"
+      field: "title"
+      confidence: 0.99
+aliases:
+  - source: "modrinth"
+    project_id: "uXXwy32m"
+    slug: "ferritecore"
+timestamps:first_seen: "2021-01-05T00:00:00Z"
+  last_canonicalized: "2026-08-02T02:25:19.956Z"
+vector_2d:
+  - 19
+  - 25

@@ -1,0 +1,39 @@
+id: "mod_sodium_001"
+dewey_code: "794.81.1"
+type: "Mod"
+canonical:name: "Sodium"
+  slug: "sodium"
+  description_summary: "High performance optimization mod for rendering."
+  loaders:
+    - "fabric"
+    - "quilt"
+  categories:
+    - "performance"
+    - "rendering"
+  license: "lgpl-3.0"
+provenance:name:
+    - source: "modrinth"
+      project_id: "AANobbMI"
+      field: "title"
+      confidence: 0.98
+    - source: "curseforge"
+      project_id: 395806
+      field: "name"
+      confidence: 0.95
+  description_summary:
+    - source: "modrinth"
+      project_id: "AANobbMI"
+      field: "description"
+      confidence: 0.9
+aliases:
+  - source: "modrinth"
+    project_id: "AANobbMI"
+    slug: "sodium"
+  - source: "curseforge"
+    project_id: 395806
+    slug: "sodium"
+timestamps:first_seen: "2020-05-15T00:00:00Z"
+  last_canonicalized: "2026-08-02T02:25:19.956Z"
+vector_2d:
+  - 20
+  - 30

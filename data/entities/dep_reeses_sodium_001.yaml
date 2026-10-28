@@ -1,0 +1,17 @@
+id: "dep_reeses_sodium_001"
+dewey_code: "794.81.3"
+type: "DependencyEdge"
+canonical:source_mod_id: "mod_reeses_sodium_001"
+  target_mod_id: "mod_sodium_001"
+  relation: "required"
+  version_range: ">=0.5.0"
+  clause_text: "Reese's Sodium Options requires Sodium to enhance its video options menu."
+provenance:relation:
+    - source: "modrinth"
+      field: "dependencies"
+      confidence: 1
+timestamps:first_seen: "2021-08-01T00:00:00Z"
+  last_canonicalized: "2026-08-02T02:25:19.956Z"
+vector_2d:
+  - 21
+  - 30

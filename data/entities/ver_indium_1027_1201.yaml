@@ -1,0 +1,19 @@
+id: "ver_indium_1027_1201"
+dewey_code: "794.81.2"
+type: "Version"
+canonical:mod_id: "mod_indium_001"
+  version_number: "1.0.27+mc1.20.1"
+  game_versions:
+    - "1.20.1"
+  loaders:
+    - "fabric"
+  changelog_summary: "Fix compatibility with Sodium 0.5.x"
+provenance:version_number:
+    - source: "modrinth"
+      field: "version_number"
+      confidence: 1
+timestamps:first_seen: "2023-08-15T00:00:00Z"
+  last_canonicalized: "2026-08-02T02:25:19.956Z"
+vector_2d:
+  - 23
+  - 36

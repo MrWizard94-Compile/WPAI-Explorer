@@ -1,0 +1,26 @@
+id: "mod_reeses_sodium_001"
+dewey_code: "794.81.1"
+type: "Mod"
+canonical:name: "Reese's Sodium Options"
+  slug: "reeses-sodium-options"
+  description_summary: "Replaces Sodium's video options screen with a tabbed interface for better usability."
+  loaders:
+    - "fabric"
+    - "quilt"
+  categories:
+    - "performance"
+    - "gui"
+provenance:name:
+    - source: "modrinth"
+      project_id: "Bh13M22g"
+      field: "title"
+      confidence: 1
+aliases:
+  - source: "modrinth"
+    project_id: "Bh13M22g"
+    slug: "reeses-sodium-options"
+timestamps:first_seen: "2021-08-01T00:00:00Z"
+  last_canonicalized: "2026-08-02T02:25:19.956Z"
+vector_2d:
+  - 22
+  - 29

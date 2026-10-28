@@ -19,7 +19,8 @@
     "models:pull": "docker compose run --rm ollama-models",
     "clean": "node -e \"const fs=require('node:fs'); for (const p of ['dist','dist-desktop']) fs.rmSync(p,{recursive:true,force:true});\"",
     "lint": "tsc --noEmit",
-    "test": "tsx src/test.ts"
+    "test": "tsx src/test.ts",
+    "populate:data": "tsx scripts/populate-data.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.5",

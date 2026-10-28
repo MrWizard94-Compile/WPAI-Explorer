@@ -1,0 +1,17 @@
+id: "dep_iris_sodium_1201"
+dewey_code: "794.81.3"
+type: "DependencyEdge"
+canonical:source_version_id: "ver_iris_1610_1201"
+  target_mod_id: "mod_sodium_001"
+  relation: "required"
+  version_range: ">=0.5.3"
+  clause_text: "requires sodium >=0.5.3 on fabric"
+provenance:relation:
+    - source: "modrinth"
+      field: "dependencies"
+      confidence: 1
+timestamps:first_seen: "2023-08-11T00:00:00Z"
+  last_canonicalized: "2026-08-02T02:25:19.956Z"
+vector_2d:
+  - 25
+  - 55

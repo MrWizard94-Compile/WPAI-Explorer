@@ -1,0 +1,19 @@
+id: "ver_iris_1610_1201"
+dewey_code: "794.81.2"
+type: "Version"
+canonical:mod_id: "mod_iris_001"
+  version_number: "1.6.10"
+  game_versions:
+    - "1.20.1"
+  loaders:
+    - "fabric"
+  changelog_summary: "Added support for Sodium 0.5.3."
+provenance:version_number:
+    - source: "modrinth"
+      field: "version_number"
+      confidence: 1
+timestamps:first_seen: "2023-08-11T00:00:00Z"
+  last_canonicalized: "2026-08-02T02:25:19.956Z"
+vector_2d:
+  - 31
+  - 81

@@ -1,0 +1,29 @@
+id: "mod_create_001"
+dewey_code: "794.81.1"
+type: "Mod"
+canonical:name: "Create"
+  slug: "create"
+  description_summary: "A mod offering a variety of tools and blocks for Building, Decoration and Aesthetic Automation."
+  loaders:
+    - "forge"
+    - "fabric"
+  categories:
+    - "technology"
+    - "automation"
+provenance:name:
+    - source: "curseforge"
+      project_id: 328085
+      field: "name"
+      confidence: 1
+aliases:
+  - source: "curseforge"
+    project_id: 328085
+    slug: "create"
+  - source: "modrinth"
+    project_id: "Xbc0uyRg"
+    slug: "create"
+timestamps:first_seen: "2019-11-20T00:00:00Z"
+  last_canonicalized: "2026-08-02T02:25:19.956Z"
+vector_2d:
+  - 80
+  - 20

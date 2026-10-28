@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell } = require('electron');
+const { app, BrowserWindow, shell, ipcMain } = require('electron');
 const path = require('path');
 
 let mainWindow = null;
@@ -35,7 +35,8 @@ async function createWindow() {
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: true
+      sandbox: true,
+      preload: path.join(__dirname, 'preload.cjs')
     }
   });
 
@@ -52,6 +53,16 @@ async function createWindow() {
   const targetUrl = isDev ? devUrl : await startPackagedServer();
   await mainWindow.loadURL(targetUrl);
 }
+
+ipcMain.handle('open-file', async (_event, filePath) => {
+  if (!filePath || typeof filePath !== 'string') return false;
+  try {
+    const result = await shell.openPath(filePath);
+    return result === '';
+  } catch {
+    return false;
+  }
+});
 
 const singleInstanceLock = app.requestSingleInstanceLock();
 

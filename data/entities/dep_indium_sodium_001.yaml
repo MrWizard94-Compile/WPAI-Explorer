@@ -1,0 +1,17 @@
+id: "dep_indium_sodium_001"
+dewey_code: "794.81.3"
+type: "DependencyEdge"
+canonical:source_mod_id: "mod_indium_001"
+  target_mod_id: "mod_sodium_001"
+  relation: "required"
+  version_range: "*"
+  clause_text: "Indium fundamentally requires Sodium to function."
+provenance:relation:
+    - source: "modrinth"
+      field: "dependencies"
+      confidence: 1
+timestamps:first_seen: "2021-06-20T00:00:00Z"
+  last_canonicalized: "2026-08-02T02:25:19.956Z"
+vector_2d:
+  - 21
+  - 32

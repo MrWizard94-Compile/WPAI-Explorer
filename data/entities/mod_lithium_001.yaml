@@ -1,0 +1,25 @@
+id: "mod_lithium_001"
+dewey_code: "794.81.1"
+type: "Mod"
+canonical:name: "Lithium"
+  slug: "lithium"
+  description_summary: "No-compromises game logic optimization mod."
+  loaders:
+    - "fabric"
+    - "quilt"
+  categories:
+    - "performance"
+provenance:name:
+    - source: "modrinth"
+      project_id: "gvQqBUqZ"
+      field: "title"
+      confidence: 0.99
+aliases:
+  - source: "modrinth"
+    project_id: "gvQqBUqZ"
+    slug: "lithium"
+timestamps:first_seen: "2020-06-01T00:00:00Z"
+  last_canonicalized: "2026-08-02T02:25:19.956Z"
+vector_2d:
+  - 18
+  - 28
